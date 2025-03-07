@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>বাংলা থেকে ইংরেজি ট্রান্সলেটর</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <p class="credits">Made By Burhan</p>
+  </header>
+  <div class="container">
+    <h1>বাংলা থেকে ইংরেজি ট্রান্সলেটর</h1>
+    <input type="text" id="banglaInput" placeholder="বাংলা শব্দ লিখুন">
+    <button id="translateBtn">অনুবাদ করুন</button>
+    <div id="translationResult"></div>
+  </div>
+
+  <script>
+    let vocabData = {};
+
+    // vocab.json ফাইল থেকে ভোকাবুলারি ডেটা লোড করা
+    fetch('vocab.json')
+      .then(response => response.json())
+      .then(data => {
+        vocabData = data;
+      })
+      .catch(error => {
+        console.error("ভোকাবুলারি ডেটা লোড করতে সমস্যা হয়েছে:", error);
+      });
+
+    // অনুবাদ ফাংশন
+    document.getElementById('translateBtn').addEventListener('click', function() {
+      const banglaWord = document.getElementById('banglaInput').value.trim();
+      const resultDiv = document.getElementById('translationResult');
+
+      if (banglaWord === "") {
+        resultDiv.innerHTML = "<p>অনুগ্রহ করে একটি বাংলা শব্দ লিখুন।</p>";
+        return;
+      }
+
+      // যদি ডেটাতে শব্দটি পাওয়া যায়
+      if (vocabData[banglaWord]) {
+        resultDiv.innerHTML = `<p><strong>${banglaWord}</strong> এর ইংরেজি: <span class="translation">${vocabData[banglaWord]}</span></p>`;
+      } else {
+        resultDiv.innerHTML = `<p>দুঃখিত, '${banglaWord}' শব্দটি ডাটাবেসে পাওয়া যায়নি।</p>`;
+      }
+    });
+  </script>
+</body>
+  </html>
+    
